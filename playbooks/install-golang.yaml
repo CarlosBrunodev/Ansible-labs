@@ -1,0 +1,22 @@
+---
+- name: Instalar Go (Golang)
+  hosts: vms
+  become: true
+
+  vars:
+    go_version: "1.21.5"  # Substitua pela versão desejada
+    go_tarball: "/tmp/go{{ go_version }}.linux-amd64.tar.gz"
+
+  tasks:
+    - name: Baixar arquivo tar do Go
+      ansible.builtin.get_url:
+        url: "https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz"
+        dest: "{{ go_tarball }}"
+        checksum: "sha256:e2bc0b3e4b64111ec117295c088bde5f00eeed1567999ff77bc859d7df70078e"  # Consulte https://golang.org/dl/ para obter os valores corretos
+
+    - name: Descompactar arquivo tar
+      ansible.builtin.shell:
+        cmd: "tar -C /usr/local -xzf {{ go_tarball }}"
+        executable: /bin/bash
+      args:
+        warn: no

@@ -1,0 +1,25 @@
+---
+- name: Instalar kubectl
+  hosts: vms
+  become: yes
+
+  tasks:
+    - name: Obter a versão estável do kubectl
+      command: curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
+      register: kubectl_stable_version
+
+    - name: Baixar o kubectl
+      get_url:
+        url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_stable_version.stdout }}/bin/linux/amd64/kubectl"
+        dest: /usr/local/bin/kubectl
+        mode: 'a+x'
+
+    - name: Verificar a instalação do kubectl
+      command: kubectl version --client
+      ignore_errors: yes
+      register: kubectl_version_output
+
+    - name: Exibir a versão do kubectl
+      debug:
+        var: kubectl_version_output.stdout_lines
+      when: kubectl_version_output.rc == 0
