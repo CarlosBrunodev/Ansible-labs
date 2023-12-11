@@ -1,6 +1,6 @@
 ## Ansible 
 
-![Ansible image](../img/Untitled.png)
+![Ansible image](./img/Untitled.png)
 
 ## Links Refs
 
